@@ -19,3 +19,4 @@ typedef struct		s_list
 }					t_list;
 
 t_list	*ft_lstnew(void *content);
+void	ft_lstadd_back(t_list **list, t_list *new);

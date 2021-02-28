@@ -12,20 +12,25 @@
 
 #include "libft.h"
 #include <stdio.h>
-extern char **environ;
 
-int	main()
+int	main(int argc, char **argv, char **environ)
 {
-	t_list	*list;
+	t_list	*lst;
 	char	str[] = "hello world";
-	char	**nv = environ;
+	char	ptr[] = "the back add";
 
-	list = ft_lstnew(str);
-	printf("%s\n", list->content);
-	while (*nv)
+	lst = ft_lstnew(str);
+	printf("%s\n", lst->content);
+	ft_lstadd_back(&lst, ft_lstnew(ptr));
+	while (lst->next)
 	{
-		printf("%s\n", *nv);
-		nv++;
+		lst = lst->next;
+		printf("%s\n", lst->content);
 	}
+//	while (*environ)
+//	{
+//		printf("%s\n", *environ);
+//		environ++;
+//	}
 	return (0);
 }
