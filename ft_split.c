@@ -1,18 +1,18 @@
-﻿/* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsierra- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/01 15:40:30 by tsierra-          #+#    #+#             */
-/*   Updated: 2021/03/01 15:42:57 by tsierra-         ###   ########.fr       */
+/*   Created: 2021/03/01 16:02:41 by tsierra-          #+#    #+#             */
+/*   Updated: 2021/03/01 16:19:19 by tsierra-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int		ft_word_count(char const *s, char c)
+static int	ft_word_count(char const *s, char c)
 {
 	int	i;
 	int	count;
@@ -33,9 +33,9 @@ static int		ft_word_count(char const *s, char c)
 	return (count);
 }
 
-static size_t	ft_strnlen(char const *s, char c)
+static int	ft_strnlen(char const *s, char c)
 {
-	size_t	count;
+	int	count;
 
 	count = 0;
 	while (*s != c)
@@ -46,7 +46,7 @@ static size_t	ft_strnlen(char const *s, char c)
 	return (count);
 }
 
-char			**ft_split(char const *s, char c)
+char		**ft_split(char const *s, char c)
 {
 	char	**table;
 	int		word;
