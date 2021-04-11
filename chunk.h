@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   chunk.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsierra- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/01 11:51:42 by tsierra-          #+#    #+#             */
-/*   Updated: 2021/03/01 11:51:45 by tsierra-         ###   ########.fr       */
+/*   Created: 2021/03/01 17:42:46 by tsierra-          #+#    #+#             */
+/*   Updated: 2021/03/01 17:45:49 by tsierra-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef CHUNK_H
+# define CHUNK_H
 
-t_list	*ft_lstlast(t_list *lst)
+#include <stdint.h>
+
+typedef struct	s_chunk
 {
-	if (lst)
-		while (lst->next)
-			lst = lst->next;
-	return (lst);
-}
+	int			count;
+	int			capacity;
+	uint8_t		*code;
+}				t_chunk;
+
+#endif
