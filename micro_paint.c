@@ -127,19 +127,13 @@ int	extractRectangle( FILE *fstream, t_draw *draw )
 
 void	printDraw( t_draw *draw )
 {
-	int	X;
 	int Y;
 
 	Y = 0;
 	while ( Y < draw->height )
 	{
-		X = 0;
-		while ( X < draw->width )
-		{
-			write(STDOUT, &draw->zone[ X + Y * draw->width ], 1);
-			X++;
-		}
-		write(STDOUT, "\n", 1); 
+		write( STDOUT, &draw->zone[ Y * draw->width ], draw->width );
+		write(STDOUT, "\n", 1);
 		Y++;
 	}
 	return ;
