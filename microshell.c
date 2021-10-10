@@ -38,22 +38,6 @@ char	**get_next( char **argv, char *end )
 	return NULL;
 }
 
-void	execute_cmd( char **argv, char **env )
-{
-	pid_t	child_pid;
-
-	child_pid = fork();
-	if ( child_pid == -1 )
-		print_error( "Error: fatal", NULL );
-	else if ( child_pid == 0 )
-	{
-		if ( execve( *argv, argv, env ) == -1 )
-			print_error( "Error: cannot execute ", *argv );
-		exit( EXIT_SUCCESS );
-	}
-	waitpid( child_pid, NULL, 0 );
-}
-
 void	builtin_cd( char **argv)
 {
 	int	ret;
@@ -68,17 +52,52 @@ void	builtin_cd( char **argv)
 	}
 }
 
+void	execute_cmd( char **argv, char **env, int *fd_pipe, int fd_in )
+{
+	pid_t	child_pid;
+
+	child_pid = fork();
+	if ( child_pid == -1 )
+		print_error( "Error: fatal", NULL );
+	else if ( child_pid == 0 )
+	{
+		if ( fd_in )
+			dup2( fd_in, 0);
+		if ( fd_pipe[1] != 1 )
+			dup2( fd_pipe[1], 1 );
+		if ( execve( *argv, argv, env ) == -1 )
+			print_error( "Error: cannot execute ", *argv );
+		exit( EXIT_SUCCESS );
+	}
+	waitpid( child_pid, NULL, 0 );
+}
+
 void	execute_pipeline( char **argv, char **env )
 {
 	char	**next_cmd;
+	int		fd_pipe[2];
+	int		fd_in;
 
+	fd_pipe[0] = 0;
+	fd_pipe[1] = 1;
+	fd_in = 0;
 	while ( argv && *argv )
 	{
 		next_cmd = get_next( argv, "|" );
 		if ( !strcmp( *argv, "cd" ) )
 			builtin_cd( ++argv );
 		else
-			execute_cmd( argv, env );
+		{
+			if ( next_cmd )
+				pipe( fd_pipe );
+			execute_cmd( argv, env, fd_pipe, fd_in );
+			if ( fd_in )
+				close( fd_in );
+			if ( fd_pipe[1] != 1 )
+				close( fd_pipe[1] );
+			if ( next_cmd )
+				fd_in = fd_pipe[0];
+		}
 		argv = next_cmd;
 	}
 }
