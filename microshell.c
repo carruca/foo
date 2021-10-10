@@ -62,9 +62,15 @@ void	execute_cmd( char **argv, char **env, int *fd_pipe, int fd_in )
 	else if ( child_pid == 0 )
 	{
 		if ( fd_in )
+		{
 			dup2( fd_in, 0);
+			return print_error( "Error: fatal", NULL );
+		}
 		if ( fd_pipe[1] != 1 )
+		{
 			dup2( fd_pipe[1], 1 );
+			return print_error( "Error: fatal", NULL );
+		}
 		if ( execve( *argv, argv, env ) == -1 )
 			print_error( "Error: cannot execute ", *argv );
 		exit( EXIT_SUCCESS );
@@ -89,7 +95,10 @@ void	execute_pipeline( char **argv, char **env )
 		else
 		{
 			if ( next_cmd )
-				pipe( fd_pipe );
+			{
+				if ( pipe( fd_pipe ) == -1 )
+					return print_error( "Error: fatal", NULL );
+			}
 			execute_cmd( argv, env, fd_pipe, fd_in );
 			if ( fd_in )
 				close( fd_in );
